@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+openai
+python-dotenv
+SpeechRecognition
+pygame
+pydantic
+pyaudio
+python-multipart
+pydantic-settings
+requests
+jinja2
