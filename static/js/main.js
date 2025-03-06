@@ -97,14 +97,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 state.conversationStarted = true;
                 
                 // Update UI elements
-                roleStatus.textContent = `Your role: ${state.systemRole.toUpperCase()}`;
+                roleStatus.textContent = `Your role: ${state.systemRole ? state.systemRole.toUpperCase() : 'Unknown'}`;
                 guidanceText.textContent = data.role_guidance;
                 
                 // Clear conversation
                 conversationManager.clearConversation();
                 
                 // Add welcome message
-                const welcomeMsg = `[Conversation started] You are the ${state.systemRole.toUpperCase()}, the AI is the ${state.assistantRole.toUpperCase()}. Scenario: ${state.scenario.replace('_', ' ')}.`;
+                const welcomeMsg = `[Conversation started] You are the ${state.systemRole ? state.systemRole.toUpperCase() : 'Unknown'}, the AI is the ${state.assistantRole ? state.assistantRole.toUpperCase() : 'Unknown'}. Scenario: ${state.scenario.replace('_', ' ')}.`;
                 conversationManager.addSystemMessage(welcomeMsg);
                 
                 // Enable interaction
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 guidanceText.textContent = data.role_guidance;
                 
                 // Add system message
-                const roleMsg = `[Roles switched] You are now the ${state.systemRole.toUpperCase()}, the AI is the ${state.assistantRole.toUpperCase()}.`;
+                const roleMsg = `[Roles switched] You are now the ${state.systemRole ? state.systemRole.toUpperCase() : 'Unknown'}, the AI is the ${state.assistantRole ? state.assistantRole.toUpperCase() : 'Unknown'}.`;
                 conversationManager.addSystemMessage(roleMsg);
             } else {
                 throw new Error(data.message || 'Failed to switch roles');
