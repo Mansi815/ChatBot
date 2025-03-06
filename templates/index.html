@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Conversation Training</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sales Conversation Training</h1>
+            <p id="role-status">Your role: Not yet assigned</p>
+        </header>
+
+        <div class="setup-container">
+            <div class="setup-item">
+                <label for="role-select">Your Role:</label>
+                <select id="role-select" class="select-dropdown">
+                    <option value="sales specialist">Sales Specialist</option>
+                    <option value="customer">Customer</option>
+                </select>
+            </div>
+
+            <div class="setup-item">
+                <label for="scenario-select">Scenario:</label>
+                <select id="scenario-select" class="select-dropdown">
+                    <option value="product_pitch">Product Pitch</option>
+                    <option value="objection_handling">Objection Handling</option>
+                    <option value="negotiation">Negotiation</option>
+                    <option value="upselling">Upselling</option>
+                </select>
+            </div>
+
+            <div class="setup-item">
+                <label for="tts-toggle">Auto TTS:</label>
+                <label class="switch">
+                    <input type="checkbox" id="tts-toggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <button id="start-conversation" class="primary-button">Start Conversation</button>
+        </div>
+
+        <div class="guidance-box" id="role-guidance">
+            <h3>Your Role Guidance:</h3>
+            <p id="guidance-text">Select a role and scenario to see guidance.</p>
+        </div>
+
+        <div class="conversation-container">
+            <div id="conversation-box" class="conversation-box"></div>
+
+            <div class="input-area">
+                <textarea id="message-input" placeholder="Type your message..." rows="3"></textarea>
+                <div class="button-group">
+                    <button id="send-button" class="primary-button">Send</button>
+                    <button id="mic-button" class="icon-button"><i class="fas fa-microphone"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls-container">
+            <button id="switch-roles" class="control-button">Switch Roles</button>
+            <button id="analyze-conversation" class="control-button">Analyze Conversation</button>
+            <button id="reset-conversation" class="control-button">Reset Conversation</button>
+        </div>
+
+        <!-- Feedback Modal -->
+        <div id="feedback-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Conversation Analysis</h2>
+                <div id="feedback-content"></div>
+            </div>
+        </div>
+
+        <!-- Recording Modal -->
+        <div id="recording-modal" class="modal">
+            <div class="modal-content recording-content">
+                <h2>Recording...</h2>
+                <div class="recording-indicator">
+                    <div class="recording-animation"></div>
+                </div>
+                <p>Speak now. Click anywhere to stop.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', path='/js/typing.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/speech.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/conversation.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/main.js') }}"></script>
+    
+</body>
+</html>
