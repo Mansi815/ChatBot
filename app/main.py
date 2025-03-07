@@ -108,6 +108,33 @@ async def analyze_conversation(request: FeedbackRequest):
         "feedback": feedback
     }
 
+@app.post("/api/text-to-speech")
+async def text_to_speech(request: SpeechRequest):
+    """Convert text to speech audio with female voice"""
+    try:
+        # Try using local TTS server if available
+        try:
+            url = 'http://localhost:5000/synthesize'
+            # Explicitly set voice to af_heart (female voice)
+            data = {'text': request.text, 'voice': "af_heart"}
+            response = requests.post(url, json=data, timeout=5)
+            audio_data = response.content
+        except:
+            # Fallback to OpenAI TTS with a female voice
+            response = openai.audio.speech.create(
+                model="tts-1",
+                voice="nova",  # Using 'nova' as it's a female voice
+                input=request.text
+            )
+            audio_data = response.content
+        
+        # Convert audio data to base64 for sending to client
+        base64_audio = base64.b64encode(audio_data).decode('utf-8')
+        return {"status": "success", "audio": base64_audio}
+    
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+    
 @app.post("/api/speech-to-text")
 async def speech_to_text(file: UploadFile = File(...)):
     """Convert speech audio to text"""
@@ -133,31 +160,7 @@ async def speech_to_text(file: UploadFile = File(...)):
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
-@app.post("/api/text-to-speech")
-async def text_to_speech(request: SpeechRequest):
-    """Convert text to speech audio"""
-    try:
-        # Try using local TTS server if available
-        try:
-            url = 'http://localhost:5000/synthesize'
-            data = {'text': request.text, 'voice': "af_heart"}
-            response = requests.post(url, json=data, timeout=5)
-            audio_data = response.content
-        except:
-            # Fallback to OpenAI TTS if local server fails
-            response = openai.audio.speech.create(
-                model="tts-1",
-                voice="alloy",
-                input=request.text
-            )
-            audio_data = response.content
-        
-        # Convert audio data to base64 for sending to client
-        base64_audio = base64.b64encode(audio_data).decode('utf-8')
-        return {"status": "success", "audio": base64_audio}
-    
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
+
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -186,6 +189,12 @@ async def websocket_endpoint(websocket: WebSocket):
                     "system_role": conversation_manager.system_role,
                     "assistant_role": conversation_manager.assistant_role
                 })
+                
+    except WebSocketDisconnect:
+        print("Client disconnected")
+
+if __name__ == "__main__":
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
                 
     except WebSocketDisconnect:
         print("Client disconnected")
